@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Compra · GoalShop</title>
+  <link rel="stylesheet" href="/css/style_carrito.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="/" class="nav-logo">⚽ GOAL<span class="dot">SHOP</span></a>
+  <div class="nav-links">
+    <a href="/" class="nav-link">← Inicio</a>
+    <a href="/carrito" class="nav-link">🛒 Carrito</a>
+    <div id="nav-auth"></div>
+  </div>
+</nav>
+
+<!-- CABECERA -->
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="/">Inicio</a>
+    <span class="sep">›</span>
+    <a href="/carrito">Carrito</a>
+    <span class="sep">›</span>
+    <span class="current">Pago</span>
+  </div>
+  <h1 class="page-title">FINALIZAR COMPRA</h1>
+</div>
+
+<!-- LAYOUT -->
+<div class="checkout-layout">
+
+  <!-- Formulario -->
+  <div>
+    {{ERROR}}
+
+    <form method="POST" action="/checkout">
+
+      <!-- Paso 1: Datos personales -->
+      <div class="checkout-form-card" style="margin-bottom:20px">
+        <div class="checkout-section-header">
+          <div class="checkout-step-num">1</div>
+          <div class="checkout-section-title">Datos de entrega</div>
+        </div>
+        <div class="checkout-form-body">
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label" for="nombre">Nombre completo *</label>
+              <div class="field-wrap">
+                <input type="text" id="nombre" name="nombre"
+                       placeholder="Juan Pérez" required>
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="email">Correo electrónico *</label>
+              <div class="field-wrap">
+                <input type="email" id="email" name="email"
+                       placeholder="tu@correo.com" required>
+              </div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label" for="telefono">Teléfono / WhatsApp</label>
+              <div class="field-wrap">
+                <input type="tel" id="telefono" name="telefono" placeholder="+51 999 999 999">
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="dni">DNI</label>
+              <div class="field-wrap">
+                <input type="text" id="dni" name="dni" placeholder="12345678" maxlength="8">
+              </div>
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="direccion">Dirección completa *</label>
+            <div class="field-wrap">
+              <textarea id="direccion" name="direccion"
+                        placeholder="Av. Ejemplo 123, Miraflores, Lima" required></textarea>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label" for="ciudad">Ciudad</label>
+              <div class="field-wrap">
+                <select id="ciudad" name="ciudad">
+                  <option value="Lima">Lima</option>
+                  <option value="Arequipa">Arequipa</option>
+                  <option value="Cusco">Cusco</option>
+                  <option value="Trujillo">Trujillo</option>
+                  <option value="Piura">Piura</option>
+                  <option value="Otra">Otra ciudad</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="talla">Talla de camiseta</label>
+              <div class="field-wrap">
+                <select id="talla" name="talla">
+                  <option value="S">S (Small)</option>
+                  <option value="M" selected>M (Medium)</option>
+                  <option value="L">L (Large)</option>
+                  <option value="XL">XL (Extra Large)</option>
+                  <option value="XXL">XXL (2XL)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paso 2: Método de pago -->
+      <div class="checkout-form-card" style="margin-bottom:20px">
+        <div class="checkout-section-header">
+          <div class="checkout-step-num">2</div>
+          <div class="checkout-section-title">Método de pago</div>
+        </div>
+        <div class="checkout-form-body">
+          <div class="pago-opciones">
+
+            <label class="pago-opcion">
+              <input type="radio" name="metodo_pago" value="yape" checked>
+              <span class="pago-icono">📱</span>
+              <div class="pago-opcion-info">
+                <div class="pago-opcion-nombre">Yape / Plin</div>
+                <div class="pago-opcion-desc">Pago instantáneo por billetera digital</div>
+              </div>
+            </label>
+
+            <label class="pago-opcion">
+              <input type="radio" name="metodo_pago" value="transferencia">
+              <span class="pago-icono">🏦</span>
+              <div class="pago-opcion-info">
+                <div class="pago-opcion-nombre">Transferencia Bancaria</div>
+                <div class="pago-opcion-desc">BCP, Interbank, BBVA, Scotiabank</div>
+              </div>
+            </label>
+
+            <label class="pago-opcion">
+              <input type="radio" name="metodo_pago" value="contraentrega">
+              <span class="pago-icono">🚪</span>
+              <div class="pago-opcion-info">
+                <div class="pago-opcion-nombre">Pago contra entrega</div>
+                <div class="pago-opcion-desc">Solo Lima Metropolitana</div>
+              </div>
+            </label>
+
+            <label class="pago-opcion">
+              <input type="radio" name="metodo_pago" value="tarjeta">
+              <span class="pago-icono">💳</span>
+              <div class="pago-opcion-info">
+                <div class="pago-opcion-nombre">Tarjeta de crédito/débito</div>
+                <div class="pago-opcion-desc">Visa, Mastercard — pago seguro</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón confirmar -->
+      <button type="submit" class="btn-confirmar">
+        🔒 Confirmar pedido — S/. {{TOTAL}}
+      </button>
+
+    </form>
+  </div>
+
+  <!-- Resumen lateral -->
+  <div class="checkout-resumen">
+    <div class="checkout-resumen-title">TU PEDIDO</div>
+    <div class="resumen-items">
+      {{RESUMEN}}
+    </div>
+    <div class="resumen-row" style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;color:var(--muted)">
+      <span>Envío</span>
+      <span style="color:#2ed573;font-weight:600">Gratis 🚚</span>
+    </div>
+    <div class="checkout-total-row">
+      <span class="lbl">Total a pagar</span>
+      <span class="val">S/. {{TOTAL}}</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.6">
+      🔒 Tus datos están protegidos con cifrado SSL<br>
+      ✅ Camisetas 100% oficiales garantizadas
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">⚽ GOAL<span class="dot">SHOP</span></div>
+  <div class="footer-copy">© 2024 GoalShop · Todos los derechos reservados</div>
+</footer>
+
+<script>
+  const usuario = "{{USUARIO}}";
+  const navAuth = document.getElementById("nav-auth");
+  if (usuario) {
+    navAuth.innerHTML = `
+      <div class="nav-usuario">
+        <div class="avatar">${usuario.charAt(0).toUpperCase()}</div>
+        <span>${usuario}</span>
+      </div>
+      <a href="/logout" class="nav-logout">Salir</a>`;
+  } else {
+    navAuth.innerHTML = `<a href="/login" class="nav-link"><span>Ingresar</span></a>`;
+  }
+</script>
+</body>
+</html>

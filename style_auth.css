@@ -1,0 +1,332 @@
+/* ═══════════════════════════════════════════════════════════
+   style_auth.css — GoalShop | Login & Registro
+   ═══════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0a1a;
+  --bg2:       #111127;
+  --bg3:       #1a1a2e;
+  --accent:    #00d4aa;
+  --accent2:   #0094ff;
+  --gold:      #f5a623;
+  --danger:    #ff4757;
+  --success:   #2ed573;
+  --text:      #e8e8f0;
+  --muted:     #7a7a9a;
+  --border:    rgba(255,255,255,0.07);
+  --radius:    14px;
+  --font-disp: 'Bebas Neue', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --transition: 0.2s ease;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: #fff; }
+
+/* ── Fondo animado ─────────────────────────────────────────── */
+.auth-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0,148,255,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(0,212,170,0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+.auth-bg::before {
+  content: '⚽';
+  position: absolute;
+  font-size: 300px;
+  opacity: 0.015;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ── Barra superior ────────────────────────────────────────── */
+.auth-topbar {
+  position: relative;
+  z-index: 10;
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,26,0.8);
+  backdrop-filter: blur(12px);
+}
+.auth-logo {
+  font-family: var(--font-disp);
+  font-size: 1.6rem;
+  letter-spacing: 2px;
+  color: #fff;
+}
+.auth-logo .dot { color: var(--accent); }
+
+/* ── Layout central ────────────────────────────────────────── */
+.auth-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+}
+
+/* ── Decoración lateral ─────────────────────────────────────── */
+.auth-deco {
+  background: linear-gradient(160deg, #0d1b3e 0%, #0a1628 40%, #001a0d 100%);
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.auth-deco::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,212,170,0.08);
+  top: -60px;
+  right: -80px;
+}
+.auth-deco::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,148,255,0.08);
+  bottom: -40px;
+  left: -50px;
+}
+.deco-ball {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+.deco-title {
+  font-family: var(--font-disp);
+  font-size: 2.4rem;
+  letter-spacing: 3px;
+  line-height: 1;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.deco-title span { color: var(--accent); }
+.deco-desc {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+.deco-features { display: flex; flex-direction: column; gap: 12px; }
+.deco-feat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.deco-feat .icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(0,212,170,0.1);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Panel de formularios ──────────────────────────────────── */
+.auth-forms {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Pestañas ──────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  background: var(--bg2);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 32px;
+  gap: 4px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  transition: all var(--transition);
+  font-family: inherit;
+}
+.tab-btn.active {
+  background: var(--accent);
+  color: #0a0a1a;
+}
+.tab-btn:hover:not(.active) { color: var(--text); }
+
+/* ── Paneles de formulario ─────────────────────────────────── */
+.form-panel { display: none; }
+.form-panel.active { display: block; }
+
+.form-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.form-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+/* ── Campos ────────────────────────────────────────────────── */
+.field-group { margin-bottom: 16px; }
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.field-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.field-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--muted);
+  font-size: 15px;
+  pointer-events: none;
+  transition: color var(--transition);
+}
+.field-wrap input {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  padding: 11px 14px 11px 38px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.field-wrap input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,212,170,0.08);
+}
+.field-wrap input:focus + .field-icon,
+.field-wrap input:focus ~ .field-icon {
+  color: var(--accent);
+}
+.field-wrap input::placeholder { color: rgba(122,122,154,0.6); }
+
+.toggle-pw {
+  position: absolute;
+  right: 12px;
+  background: none;
+  font-size: 14px;
+  color: var(--muted);
+  padding: 4px;
+  transition: color var(--transition);
+}
+.toggle-pw:hover { color: var(--accent); }
+
+/* ── Submit ────────────────────────────────────────────────── */
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  background: var(--accent);
+  color: #0a0a1a;
+  border-radius: 9px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-family: inherit;
+  transition: all var(--transition);
+  margin-top: 8px;
+}
+.btn-submit:hover { background: #00ffe0; transform: translateY(-1px); }
+.btn-submit:active { transform: translateY(0); }
+
+/* ── Mensajes ──────────────────────────────────────────────── */
+.error-msg {
+  background: rgba(255,71,87,0.1);
+  border: 1px solid rgba(255,71,87,0.3);
+  color: #ff6b78;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+.success-msg {
+  background: rgba(46,213,115,0.1);
+  border: 1px solid rgba(46,213,115,0.3);
+  color: #2ed573;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+.msg-placeholder { min-height: 0; }
+
+/* ── Divider ───────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .auth-container { grid-template-columns: 1fr; max-width: 420px; }
+  .auth-deco { display: none; }
+  .auth-forms { padding: 28px 24px; }
+}

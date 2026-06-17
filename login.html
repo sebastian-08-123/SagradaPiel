@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingresar / Registrarse · SagradaPiel</title>
+  <link rel="stylesheet" href="/css/style_auth.css">
+</head>
+<body>
+
+<div class="auth-bg"></div>
+
+<!-- Barra superior -->
+<div class="auth-topbar">
+  <a href="/" class="auth-logo"> Sagrada<span class="dot">Piel</span></a>
+</div>
+
+<!-- Contenido central -->
+<div class="auth-wrapper">
+  <div class="auth-container">
+
+    <!-- Decoración izquierda -->
+    <div class="auth-deco">
+      <img src="/imagen/logo.jpeg" style="width:120px; border-radius:12px; margin-bottom:24px;">
+      <div class="deco-title">VISTE A TU<br><span>EQUIPO</span></div>
+      <p class="deco-desc">
+        Las camisetas oficiales de los mejores clubes del mundo.
+        Regístrate y recibe ofertas exclusivas de temporada.
+      </p>
+      <div class="deco-features">
+        <div class="deco-feat">
+          <div class="icon">🚚</div>
+          <span>Envío a todo el Perú</span>
+        </div>
+        <div class="deco-feat">
+          <div class="icon">🔒</div>
+          <span>Compra 100% segura</span>
+        </div>
+        <div class="deco-feat">
+          <div class="icon">↩️</div>
+          <span>Devolución en 30 días</span>
+        </div>
+        <div class="deco-feat">
+          <div class="icon">🏆</div>
+          <span>Camisetas oficiales</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de formularios -->
+    <div class="auth-forms">
+
+      <!-- Pestañas -->
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Iniciar sesión</button>
+        <button class="tab-btn"        id="tab-reg"   onclick="switchTab('reg')">Registrarse</button>
+      </div>
+
+      <!-- ── LOGIN ──────────────────────────────────────────── -->
+      <div class="form-panel active" id="panel-login">
+        <div class="form-title">Bienvenido de vuelta</div>
+        <div class="form-sub">Ingresa a tu cuenta para continuar</div>
+
+        <div class="msg-placeholder">{{ERROR}}</div>
+
+        <form method="POST" action="/login">
+          <div class="field-group">
+            <label class="field-label" for="email">Correo electrónico</label>
+            <div class="field-wrap">
+              <input type="email" id="email" name="email"
+                     placeholder="tu@correo.com" required autocomplete="email">
+              <span class="field-icon">📧</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="password">Contraseña</label>
+            <div class="field-wrap">
+              <input type="password" id="password" name="password"
+                     placeholder="••••••••" required autocomplete="current-password">
+              <span class="field-icon">🔑</span>
+              <button type="button" class="toggle-pw" onclick="togglePw('password', this)">👁</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">Iniciar sesión</button>
+        </form>
+
+        <div class="divider">¿No tienes cuenta?</div>
+        <button class="btn-submit" style="background:transparent;border:1px solid var(--border);color:var(--text);"
+                onclick="switchTab('reg')">
+          Crear cuenta gratis
+        </button>
+      </div>
+
+      <!-- ── REGISTRO ───────────────────────────────────────── -->
+      <div class="form-panel" id="panel-reg">
+        <div class="form-title">Crear cuenta</div>
+        <div class="form-sub">Únete a SagradaPiel hoy mismo</div>
+
+        <div class="msg-placeholder">
+          {{REG_ERROR}}
+          {{REG_OK}}
+        </div>
+
+        <form method="POST" action="/registro">
+          <div class="field-group">
+            <label class="field-label" for="nombre">Nombre completo</label>
+            <div class="field-wrap">
+              <input type="text" id="nombre" name="nombre"
+                     placeholder="Juan Pérez" required autocomplete="name">
+              <span class="field-icon">👤</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="reg_email">Correo electrónico</label>
+            <div class="field-wrap">
+              <input type="email" id="reg_email" name="reg_email"
+                     placeholder="tu@correo.com" required autocomplete="email">
+              <span class="field-icon">📧</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="reg_password">Contraseña</label>
+            <div class="field-wrap">
+              <input type="password" id="reg_password" name="reg_password"
+                     placeholder="Mínimo 6 caracteres" required minlength="6"
+                     autocomplete="new-password">
+              <span class="field-icon">🔑</span>
+              <button type="button" class="toggle-pw" onclick="togglePw('reg_password', this)">👁</button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="reg_password2">Confirmar contraseña</label>
+            <div class="field-wrap">
+              <input type="password" id="reg_password2" name="reg_password2"
+                     placeholder="Repite la contraseña" required
+                     autocomplete="new-password">
+              <span class="field-icon">🔑</span>
+              <button type="button" class="toggle-pw" onclick="togglePw('reg_password2', this)">👁</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">Crear cuenta</button>
+        </form>
+
+        <div class="divider">¿Ya tienes cuenta?</div>
+        <button class="btn-submit" style="background:transparent;border:1px solid var(--border);color:var(--text);"
+                onclick="switchTab('login')">
+          Iniciar sesión
+        </button>
+      </div>
+
+    </div><!-- /auth-forms -->
+  </div><!-- /auth-container -->
+</div><!-- /auth-wrapper -->
+
+<script>
+  // ── Pestañas ──────────────────────────────────────────────
+  function switchTab(tab) {
+    document.getElementById("panel-login").classList.toggle("active", tab === "login");
+    document.getElementById("panel-reg").classList.toggle("active",   tab === "reg");
+    document.getElementById("tab-login").classList.toggle("active",   tab === "login");
+    document.getElementById("tab-reg").classList.toggle("active",     tab === "reg");
+  }
+
+  // Si hay mensaje de registro, mostrar pestaña de registro
+  const regMsg = document.querySelector("#panel-reg .msg-placeholder");
+  if (regMsg && regMsg.innerHTML.trim()) switchTab("reg");
+
+  // ── Mostrar/ocultar contraseña ──────────────────────────
+  function togglePw(fieldId, btn) {
+    const input = document.getElementById(fieldId);
+    if (input.type === "password") {
+      input.type = "text";
+      btn.textContent = "🙈";
+    } else {
+      input.type = "password";
+      btn.textContent = "👁";
+    }
+  }
+</script>
+</body>
+</html>

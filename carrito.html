@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito · GoalShop</title>
+  <link rel="stylesheet" href="/css/style_carrito.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="/" class="nav-logo">⚽ GOAL<span class="dot">SHOP</span></a>
+  <div class="nav-links">
+    <a href="/" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Inicio</span>
+    </a>
+    <div id="nav-auth"></div>
+    <a href="/carrito" class="nav-carrito active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      Carrito
+      <span id="badge-count" class="carrito-badge {{TOTAL_ITEMS == '0' and 'hidden' or ''}}">{{TOTAL_ITEMS}}</span>
+    </a>
+  </div>
+</nav>
+
+<!-- CABECERA -->
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="/">Inicio</a>
+    <span class="sep">›</span>
+    <span class="current">Carrito</span>
+  </div>
+  <h1 class="page-title">
+    MI CARRITO
+    <span class="page-title-count" id="item-count-title">{{TOTAL_ITEMS}} artículo(s)</span>
+  </h1>
+</div>
+
+<!-- LAYOUT -->
+<div class="carrito-layout">
+
+  <!-- Tabla de productos -->
+  <div>
+    <div class="carrito-table-wrap">
+      <table class="carrito-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th class="th-precio">Precio unit.</th>
+            <th class="th-cant">Cantidad</th>
+            <th class="th-sub">Subtotal</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body">
+          {{ITEMS}}
+        </tbody>
+      </table>
+
+      <div class="carrito-acciones">
+        <button class="btn-vaciar" onclick="vaciarCarrito()">
+          🗑 Vaciar carrito
+        </button>
+        <a href="/" class="btn-seguir">← Seguir comprando</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen lateral -->
+  <div class="resumen-card">
+    <div class="resumen-title">RESUMEN</div>
+
+    <div class="resumen-row">
+      <span class="lbl">Subtotal</span>
+      <span class="val" id="resumen-subtotal">S/. {{GRAN_TOTAL}}</span>
+    </div>
+    <div class="resumen-row">
+      <span class="lbl">Envío</span>
+      <span class="val" style="color:#2ed573">Gratis</span>
+    </div>
+
+    <div class="badge-envio">
+      🚚 Envío gratis a todo el Perú
+    </div>
+
+    <div class="resumen-row total-row">
+      <span class="lbl">Total</span>
+      <span class="val" id="resumen-total">S/. {{GRAN_TOTAL}}</span>
+    </div>
+
+    <a href="/checkout" class="btn-checkout" id="btn-checkout"
+       style="{{GRAN_TOTAL == '0.00' and 'pointer-events:none;opacity:.5' or ''}}">
+      Proceder al pago →
+    </a>
+
+    <div class="seguridad-badges">
+      <span>🔒 Seguro</span>
+      <span>✅ Oficial</span>
+      <span>↩️ 30 días</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">⚽ GOAL<span class="dot">SHOP</span></div>
+  <div class="footer-copy">© 2024 GoalShop · Todos los derechos reservados</div>
+</footer>
+
+<script>
+  // ── Nav auth ──────────────────────────────────────────────
+  const usuario = "{{USUARIO}}";
+  const navAuth = document.getElementById("nav-auth");
+  if (usuario) {
+    navAuth.innerHTML = `
+      <div class="nav-usuario">
+        <div class="avatar">${usuario.charAt(0).toUpperCase()}</div>
+        <span>${usuario}</span>
+      </div>
+      <a href="/logout" class="nav-logout">Salir</a>`;
+  } else {
+    navAuth.innerHTML = `<a href="/login" class="nav-link"><span>Ingresar</span></a>`;
+  }
+
+  // ── Badge inicial ─────────────────────────────────────────
+  const badge = document.getElementById("badge-count");
+  const totalInicial = parseInt("{{TOTAL_ITEMS}}") || 0;
+  if (totalInicial === 0) badge.classList.add("hidden");
+
+  // ── Cambiar cantidad ──────────────────────────────────────
+  async function cambiarCant(pid, nuevaCant) {
+    const res  = await fetch("/api/carrito/actualizar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: pid, cantidad: nuevaCant })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (nuevaCant <= 0) {
+        // Eliminar fila con animación
+        const fila = document.getElementById(`fila-${pid}`);
+        if (fila) {
+          fila.style.opacity = "0";
+          fila.style.transition = "opacity 0.3s";
+          setTimeout(() => {
+            fila.remove();
+            verificarVacio();
+          }, 300);
+        }
+      } else {
+        document.getElementById(`qty-${pid}`).textContent = nuevaCant;
+        document.getElementById(`sub-${pid}`).textContent = `S/. ${data.subtotal.toFixed(2)}`;
+      }
+      actualizarTotales(data.gran_total, data.total_items);
+    }
+  }
+
+  function actualizarTotales(total, items) {
+    document.getElementById("resumen-subtotal").textContent = `S/. ${total.toFixed(2)}`;
+    document.getElementById("resumen-total").textContent    = `S/. ${total.toFixed(2)}`;
+    document.getElementById("item-count-title").textContent = `${items} artículo(s)`;
+    const b = document.getElementById("badge-count");
+    b.textContent = items;
+    items > 0 ? b.classList.remove("hidden") : b.classList.add("hidden");
+    const btn = document.getElementById("btn-checkout");
+    if (total === 0) {
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = "0.5";
+    } else {
+      btn.style.pointerEvents = "";
+      btn.style.opacity = "";
+    }
+  }
+
+  function verificarVacio() {
+    const filas = document.querySelectorAll(".fila-item");
+    if (filas.length === 0) {
+      document.getElementById("tabla-body").innerHTML =
+        '<tr><td colspan="5" class="carrito-vacio">Tu carrito está vacío 🛒 <a href="/" style="color:var(--accent)">Ir al catálogo</a></td></tr>';
+    }
+  }
+
+  async function vaciarCarrito() {
+    if (!confirm("¿Vaciar el carrito?")) return;
+    await fetch("/api/carrito/vaciar", { method: "POST" });
+    document.getElementById("tabla-body").innerHTML =
+      '<tr><td colspan="5" class="carrito-vacio">Tu carrito está vacío 🛒 <a href="/" style="color:var(--accent)">Ir al catálogo</a></td></tr>';
+    actualizarTotales(0, 0);
+  }
+</script>
+</body>
+</html>

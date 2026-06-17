@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SagradaPiel | Camisetas de Fútbol</title>
+  <link rel="stylesheet" href="/css/style_main.css">
+</head>
+<body>
+
+<!-- ═══ NAVBAR ════════════════════════════════════════════════ -->
+<nav class="navbar">
+  <a href="/" class="nav-logo"> SAGRADA<span class="dot">PIEL</span></a>
+
+  <form class="nav-search" action="/" method="GET">
+    <input type="text" name="q" placeholder="Buscar camiseta, club, liga..." value="{{BUSCAR}}">
+    <button type="submit">🔍</button>
+  </form>
+
+  <div class="nav-links">
+    <a href="/" class="nav-link active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Inicio</span>
+    </a>
+
+    <!-- Estado login/logout -->
+    <div id="nav-auth">
+      <!-- Relleno por JS según sesión -->
+    </div>
+
+    <a href="/carrito" class="nav-carrito">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      Carrito
+      <span id="badge-count" class="carrito-badge {{TOTAL_ITEMS == '0' and 'hidden' or ''}}">{{TOTAL_ITEMS}}</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">⚡ Temporada 2024/25</div>
+    <h1>VISTE CON <span>PASIÓN</span></h1>
+    <p>Las camisetas oficiales de los mejores clubes del mundo. La Liga, Premier League, Serie A, Bundesliga y más.</p>
+    <a href="#catalogo" class="hero-cta">
+      Ver Catálogo
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ FILTROS ════════════════════════════════════════════════ -->
+<div class="filtros-bar">
+  <span class="filtros-label">🏆 Filtrar por</span>
+  <form class="filtros-form" action="/" method="GET">
+    <select name="liga" class="select-liga">
+      {{LIGA_OPTIONS}}
+    </select>
+    <button type="submit" class="btn-filtrar">Aplicar</button>
+    <a href="/" class="btn-limpiar">Limpiar</a>
+  </form>
+  <div class="resultado-count" id="result-count"></div>
+</div>
+
+<!-- ═══ CATÁLOGO ═══════════════════════════════════════════════ -->
+<section class="catalogo-section" id="catalogo">
+  <h2 class="section-title">CATÁLOGO</h2>
+  <div class="productos-grid" id="productos-grid">
+    {{PRODUCTOS}}
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-logo">SAGRADA<span class="dot">PIEL</span></div>
+  <div class="footer-copy">© 2026 SagradaPiel · Derechos reservados paera las PETICERDIS</div>
+  <div class="footer-links">
+    <a href="#">Política de devoluciones</a>
+    <a href="#">Contacto</a>
+  </div>
+</footer>
+
+<!-- ═══ TOAST ══════════════════════════════════════════════════ -->
+<div id="toast">
+  <span class="toast-icon">✅</span>
+  <span id="toast-msg">Agregado al carrito</span>
+</div>
+
+<!-- ═══ SCRIPTS ════════════════════════════════════════════════ -->
+<script>
+  // ── Estado usuario en navbar ───────────────────────────────
+  const usuario = "{{USUARIO}}";
+  const navAuth = document.getElementById("nav-auth");
+  const esAdmin = {{ES_ADMIN}};
+  if (usuario) {
+    navAuth.innerHTML = `
+      <div class="nav-usuario">
+        <div class="avatar">${usuario.charAt(0).toUpperCase()}</div>
+        <span>${usuario}</span>
+      </div>
+      ${esAdmin ? '<a href="/admin" style="background:#7c3aed;color:#fff;padding:6px 14px;border-radius:7px;text-decoration:none;font-size:.85rem;font-weight:700;">⚙️ Admin</a>' : ''}
+      <a href="/logout" class="nav-logout">Salir</a>`;
+  } else {
+    navAuth.innerHTML = `
+      <a href="/login" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Ingresar</span>
+      </a>`;
+  }
+
+  // ── Badge carrito inicial ──────────────────────────────────
+  const totalItems = parseInt("{{TOTAL_ITEMS}}") || 0;
+  const badge = document.getElementById("badge-count");
+  if (totalItems === 0) badge.classList.add("hidden");
+  badge.textContent = totalItems;
+
+  // ── Contador de resultados ──────────────────────────────────
+  const count = document.querySelectorAll(".card-producto").length;
+  document.getElementById("result-count").textContent =
+    count > 0 ? `${count} producto${count !== 1 ? "s" : ""} encontrado${count !== 1 ? "s" : ""}` : "";
+
+  // ── Agregar al carrito ────────────────────────────────────
+  let toastTimer;
+  function mostrarToast(msg, ok = true) {
+    const t = document.getElementById("toast");
+    document.getElementById("toast-msg").textContent = msg;
+    t.querySelector(".toast-icon").textContent = ok ? "✅" : "❌";
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2500);
+  }
+
+  async function agregarCarrito(id, nombre, precio) {
+    try {
+      const res  = await fetch("/api/carrito/agregar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, nombre, precio })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        // Actualizar badge
+        const b = document.getElementById("badge-count");
+        b.textContent = data.total_items;
+        b.classList.remove("hidden");
+        b.classList.add("bump");
+        setTimeout(() => b.classList.remove("bump"), 300);
+        mostrarToast(`"${nombre.split(" - ")[0]}" agregado al carrito`);
+      }
+    } catch (e) {
+      mostrarToast("Error al agregar", false);
+    }
+  }
+</script>
+</body>
+</html>
